@@ -11,6 +11,7 @@ import io.jenetics.jpx.Track;
 import io.jenetics.jpx.TrackSegment;
 import io.jenetics.jpx.WayPoint;
 import io.jenetics.jpx.geom.Geoid;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -23,19 +24,8 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class TrackCreator {
-    public static final String COOKIE =
-            "_ga=GA1.2.67…";
-    private static final String SPREADSHEET_ID = "1trwAN0YqZUmUHpih8J-7N2u5NIDqv_lOZZ2vf2n-C7I";
-    private static final String TOUR_DESCRIPTION = "Beispiel-Tour 2020";
-    private static final String COPYRIGHT_AUTHOR = "Achim Autor";
-    private static final String TOUR_PREFIX = "BT";
-    private static final String OUTPUT_DIR = "out";
-    private static final Person AUTHOR = Person.of("Achim",
-            Email.of("achim@example.org"),
-            Link.of("https://www.komoot.de/user/9999999999", "Achim", "KomootUserOnWeb"));
-
     public static void main(String[] args) throws IOException, GeneralSecurityException {
-        final List<List<Object>> rows = SheetReader.start(SPREADSHEET_ID);
+        final List<List<Object>> rows = SheetReader.start(new Config().getProp("spreadsheetId"));
 
         if (rows == null || rows.isEmpty()) {
             System.err.println("No data found.");
@@ -52,8 +42,8 @@ public class TrackCreator {
                 final String kurzPage = (String) row.get(14);
                 final String langPage = (String) row.get(15);
 
-                writeTrack(TOUR_PREFIX + tag, kurzPage, hotel, buffet, !StringUtils.isEmpty(kurzBuffet));
-                writeTrack(TOUR_PREFIX + tag, langPage, hotel, buffet, !StringUtils.isEmpty(langBuffet));
+                writeTrack(Config.INSTANCE.getProp("tourPrefix") + tag, kurzPage, hotel, buffet, !StringUtils.isEmpty(kurzBuffet));
+                writeTrack(Config.INSTANCE.getProp("tourPrefix") + tag, langPage, hotel, buffet, !StringUtils.isEmpty(langBuffet));
             }
         }
     }
@@ -71,12 +61,22 @@ public class TrackCreator {
 
         final String tour = StringUtils.remove(page, "https://www.komoot.de/tour/");
 
-        final HttpURLConnection con = (HttpURLConnection) new URL("https://www.komoot.de/api/v007/tours/" + tour + ".gpx").openConnection();
-        con.setRequestMethod("GET");
-        con.addRequestProperty("Cookie", COOKIE);
+        final String komootCache = Config.INSTANCE.getProp("outputDir") + "/komoot/";
+        final File cacheDir = new File(komootCache);
+        if (!cacheDir.exists()) {
+            cacheDir.mkdir();
+        }
+        final File fileCache = new File(komootCache + tour + ".gpx");
 
-        final GPX gpxIn = GPX.read(con.getInputStream());
-        con.disconnect();
+        if (!fileCache.exists()) {
+            final HttpURLConnection con = (HttpURLConnection) new URL("https://www.komoot.de/api/v007/tours/" + tour + ".gpx").openConnection();
+            con.setRequestMethod("GET");
+            con.addRequestProperty("Cookie", Config.INSTANCE.getProp("cookies"));
+            FileUtils.copyInputStreamToFile(con.getInputStream(), fileCache);
+            con.disconnect();
+        }
+
+        final GPX gpxIn = GPX.read(FileUtils.openInputStream(fileCache));
 
         final Length length = gpxIn.tracks()
                 .flatMap(Track::segments)
@@ -86,16 +86,18 @@ public class TrackCreator {
         final int distance = Math.round((length.floatValue() / 1000));
 
         final String trackName = String.format("%s %03dkm", prefix, distance);
-        final Link trackLink = Link.of(page, TOUR_DESCRIPTION + "; " + trackName, "trackOnWeb");
-
+        final Link trackLink = Link.of(page, Config.INSTANCE.getProp("tourDescription") + "; " + trackName, "trackOnWeb");
+        final Person author = Person.of(Config.INSTANCE.getProp("copyrightAuthor"),
+                Email.of(Config.INSTANCE.getProp("autorEmail")),
+                Link.of(Config.INSTANCE.getProp("autorLink"), Config.INSTANCE.getProp("copyrightAuthor"), "KomootUserOnWeb"));
         final GPX.Builder builder = gpxIn.toBuilder()
                 .metadata(
                         Metadata.builder()
                                 .name(trackName)
-                                .desc(TOUR_DESCRIPTION)
-                                .author(AUTHOR)
+                                .desc(Config.INSTANCE.getProp("tourDescription"))
+                                .author(author)
                                 .addLink(trackLink)
-                                .copyright(Copyright.of(COPYRIGHT_AUTHOR, Calendar.getInstance().get(Calendar.YEAR)))
+                                .copyright(Copyright.of(Config.INSTANCE.getProp("copyrightAuthor"), Calendar.getInstance().get(Calendar.YEAR)))
                                 .build()
                 );
 
@@ -131,8 +133,10 @@ public class TrackCreator {
                         .build())
                 .build();
 
-        final String gpxDir = OUTPUT_DIR + "/gpx/";
-        new File(gpxDir).mkdir();
+        final String gpxDir = Config.INSTANCE.getProp("outputDir") + "/gpx/";
+        if (!new File(gpxDir).exists()) {
+            new File(gpxDir).mkdir();
+        }
         final String filenameGpx = gpxDir + StringUtils.replace(trackName, " ", "_") + ".gpx";
 
         final GPX gpxOut = builder.build();
