@@ -72,7 +72,7 @@ public class TrackCreator {
         if (!fileCache.exists()) {
             final HttpURLConnection con = (HttpURLConnection) new URL("https://www.komoot.de/api/v007/tours/" + tour + ".gpx").openConnection();
             con.setRequestMethod("GET");
-            con.addRequestProperty("Cookie", Config.INSTANCE.getProp("cookies"));
+            con.addRequestProperty("Cookie", Config.INSTANCE.getProp("komootCookie"));
             FileUtils.copyInputStreamToFile(con.getInputStream(), fileCache);
             con.disconnect();
         }

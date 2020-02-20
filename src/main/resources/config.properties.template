@@ -1,8 +1,8 @@
-spreadsheetId=
-tourDescription=Meine Tour 2020
-tourPrefix=MT
+spreadsheetId=1trwAN0YqZUmUHpih8J-7N2u5NIDqv_lOZZ2vf2n-C7I
+tourDescription=Beispiel-Tour 2020
+tourPrefix=BT
 outputDir=out
 copyrightAuthor="Peter Franz"
 autorEmail="peter@example.org"
 autorLink=https://www.komoot.de/user/99999999999
-cookies="_ga=GA1.2.679…"
+komootCookie="_ga=GA1.2.679…"
