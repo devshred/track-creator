@@ -3,8 +3,8 @@ Komoot ist ein sehr gutes Tool zum Erstellen von Strecken; leider können keine 
 
 Touren werden in einem Google Docs Sheet gepflegt; Vorlage hier: https://docs.google.com/spreadsheets/d/1trwAN0YqZUmUHpih8J-7N2u5NIDqv_lOZZ2vf2n-C7I/
 
-Anschließend muss nach folgender Anleitung eine credentials.json erstellt und in src/main/resources gespeichert werden: https://developers.google.com/docs/api/quickstart/java
+Nun muss nach folgender Anleitung eine credentials.json erstellt und in src/main/resources gespeichert werden: https://developers.google.com/docs/api/quickstart/java
 
-Jetzt noch die Konstanten in TrackCreator anpassen - fertig! (COOKIE ist der Inhalt des Cookies, der beim Download an Komoot gesendet wird.)
+Anschließend noch die Datei ```config.properties.template``` nach ```config.properties``` kopieren und entsprechend anpassen.
 
 Nun kann die Anwendung z.B. mit ```gradle run``` gestartet werden.
