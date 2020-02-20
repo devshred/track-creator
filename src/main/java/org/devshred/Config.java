@@ -5,9 +5,9 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class Config {
-    private Properties properties = new Properties();
+    private final Properties properties = new Properties();
 
-    public static Config INSTANCE = new Config();
+    public static final Config INSTANCE = new Config();
 
     public Config() {
         final InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties");
