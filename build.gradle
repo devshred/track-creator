@@ -17,4 +17,6 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.9'
     compile 'io.jenetics:jpx:1.7.0'
     compile 'commons-io:commons-io:2.6'
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.10.2'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.2'
 }
