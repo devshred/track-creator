@@ -13,6 +13,7 @@ import io.jenetics.jpx.WayPoint;
 import io.jenetics.jpx.geom.Geoid;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.devshred.tcx.TcxApp;
 
 import java.io.File;
 import java.io.IOException;
@@ -142,6 +143,8 @@ public class TrackCreator {
         final GPX gpxOut = builder.build();
         GPX.writer(" ").write(gpxOut, filenameGpx);
         System.out.println("wrote file " + filenameGpx);
+
+        TcxApp.fromGpx(gpxOut, trackName);
     }
 
     private static WayPoint findNearestTo(PointOfInterest poi, GPX gpxIn) {
