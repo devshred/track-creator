@@ -13,7 +13,6 @@ import io.jenetics.jpx.WayPoint;
 import io.jenetics.jpx.geom.Geoid;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.devshred.tcx.TcxApp;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +22,8 @@ import java.security.GeneralSecurityException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Stream;
+
+import static org.devshred.tcx.TcxApp.writeTcx;
 
 public class TrackCreator {
     public static void main(String[] args) throws IOException, GeneralSecurityException {
@@ -144,7 +145,7 @@ public class TrackCreator {
         GPX.writer(" ").write(gpxOut, filenameGpx);
         System.out.println("wrote file " + filenameGpx);
 
-        TcxApp.fromGpx(gpxOut, trackName);
+        writeTcx(gpxOut, trackName);
     }
 
     private static WayPoint findNearestTo(PointOfInterest poi, GPX gpxIn) {
