@@ -11,12 +11,22 @@ repositories {
 }
 
 dependencies {
-    compile 'com.google.api-client:google-api-client:1.30.4'
-    compile 'com.google.oauth-client:google-oauth-client-jetty:1.30.4'
-    compile 'com.google.apis:google-api-services-sheets:v4-rev581-1.25.0'
-    compile 'org.apache.commons:commons-lang3:3.9'
+    compile 'com.google.api-client:google-api-client:1.30.9'
+    compile 'com.google.oauth-client:google-oauth-client-jetty:1.30.9'
+    compile 'com.google.apis:google-api-services-sheets:v4-rev612-1.25.0'
+    compile 'org.apache.commons:commons-lang3:3.10'
     compile 'io.jenetics:jpx:1.7.0'
     compile 'commons-io:commons-io:2.6'
-    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.10.2'
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.2'
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.10.3'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.3'
+
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.1'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.1'
+    testCompile group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
+    testCompile 'org.xmlunit:xmlunit-matchers:2.6.4'
+    testCompile 'org.xmlunit:xmlunit-core:2.6.4'
+}
+
+test {
+    useJUnitPlatform()
 }
