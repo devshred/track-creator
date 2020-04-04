@@ -9,13 +9,13 @@ import java.util.List;
 public class Course {
     @JacksonXmlProperty(localName = "Name")
     private final String name;
-    @JacksonXmlProperty(localName = "CoursePoint")
-    @JacksonXmlElementWrapper(useWrapping = false)
-    private final List<CoursePoint> coursePoints = new ArrayList<>();
     @JacksonXmlProperty(localName = "Lap")
     private Lap lap;
     @JacksonXmlProperty(localName = "Track")
     private Track track;
+    @JacksonXmlProperty(localName = "CoursePoint")
+    @JacksonXmlElementWrapper(useWrapping = false)
+    private final List<CoursePoint> coursePoints = new ArrayList<>();
 
     public Course(String name) {
         this.name = name;
