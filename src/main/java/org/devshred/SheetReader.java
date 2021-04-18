@@ -6,6 +6,7 @@ import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -23,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class SheetReader {
-    private static final String APPLICATION_NAME = "Google Sheets API Java Quickstart";
+    private static final String APPLICATION_NAME = "Track Creator";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
     private static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
@@ -36,6 +37,19 @@ public class SheetReader {
                 .setApplicationName(APPLICATION_NAME).build();
         final ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
         return response.getValues();
+    }
+
+    public static List<List<Object>> findCustomPointOfInterests(String spreadsheetId, String sheetName) throws IOException, GeneralSecurityException {
+        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+        final String range = sheetName + "!B4:D";
+        final Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                .setApplicationName(APPLICATION_NAME).build();
+        try {
+            final ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
+            return response.getValues();
+        } catch (GoogleJsonResponseException e) {
+            return Collections.emptyList();
+        }
     }
 
     private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
