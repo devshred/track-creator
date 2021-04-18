@@ -1,3 +1,7 @@
+plugins {
+    id "com.github.ben-manes.versions" version "0.38.0"
+}
+
 apply plugin: 'java'
 apply plugin: 'application'
 
@@ -11,20 +15,20 @@ repositories {
 }
 
 dependencies {
-    compile 'com.google.api-client:google-api-client:1.30.9'
-    compile 'com.google.oauth-client:google-oauth-client-jetty:1.30.6'
-    compile 'com.google.apis:google-api-services-sheets:v4-rev612-1.25.0'
-    compile 'org.apache.commons:commons-lang3:3.10'
-    compile 'io.jenetics:jpx:1.7.0'
-    compile 'commons-io:commons-io:2.6'
-    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.10.3'
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.3'
+    compile 'com.google.api-client:google-api-client:1.30.10'
+    compile 'com.google.oauth-client:google-oauth-client-jetty:1.31.0'
+    compile 'com.google.apis:google-api-services-sheets:v4-rev20200813-1.30.10'
+    compile 'org.apache.commons:commons-lang3:3.11'
+    compile 'io.jenetics:jpx:2.0.0'
+    compile 'commons-io:commons-io:2.7'
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.11.2'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.2'
 
-    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.1'
-    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.1'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.2'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.2'
     testCompile group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
-    testCompile 'org.xmlunit:xmlunit-matchers:2.6.4'
-    testCompile 'org.xmlunit:xmlunit-core:2.6.4'
+    testCompile 'org.xmlunit:xmlunit-matchers:2.7.0'
+    testCompile 'org.xmlunit:xmlunit-core:2.7.0'
 }
 
 test {
